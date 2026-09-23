@@ -48,7 +48,7 @@ public class BranchController {
         Company company = cS.listById(dto.getIdCompany())
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
-                                "No existe la sede con el id: " + dto.getIdCompany()
+                                "No existe la empresa con el id: " + dto.getIdCompany()
                         )
                 );
         Branch b = modelMapper.map(dto, Branch.class);
@@ -78,7 +78,7 @@ public class BranchController {
 
         if (existente.isEmpty()) {
             throw new ResourceNotFoundException(
-                    "No existe una sede con el id: " +dto.getIdBranch()
+                    "No existe una sede con el id: " + dto.getIdBranch()
             );
         }
 
@@ -109,6 +109,40 @@ public class BranchController {
         BranchDTOInsert responseDTO = modelMapper.map(branch, BranchDTOInsert.class);
 
         return ResponseEntity.ok(responseDTO);
+    }
+
+    //Listar por id
+    @GetMapping("/{id}")
+    public ResponseEntity<BranchDTOList> buscarPorId(@PathVariable Long id) {
+
+        Branch branch = bS.listById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "No existe una sede con el id: " + id
+                        )
+                );
+
+        BranchDTOList dto = modelMapper.map(branch, BranchDTOList.class);
+
+        return ResponseEntity.ok(dto);
+    }
+
+    //Eliminar por id
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        //Encontrando el id solicitado y validando que exista
+        Branch branch = bS.listById(id)
+                .orElseThrow(() -> //Por si no lo encuentra
+                        new ResourceNotFoundException(
+                                "No existe una sede con el id: " + id
+                        )
+                );
+
+        //Si sí lo encontró, recién lo elimina
+        bS.delete(branch.getIdBranch());
+
+        //No devuelve ningún cuerpo de respuesta
+        return ResponseEntity.noContent().build();
     }
 
 }

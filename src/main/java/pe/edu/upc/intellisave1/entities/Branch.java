@@ -9,18 +9,18 @@ public class Branch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idBranch;
 
-    @Column(name = "nameBranch", length = 30, nullable = false)
+    @Column(name = "name_branch", length = 30, nullable = false)
     private String nameBranch;
 
-    @Column(name = "addressBranch", length = 60, nullable = false)
+    @Column(name = "address_branch", length = 60, nullable = false)
     private String addressBranch;
 
-    @Column(name = "descriptionBranch", length = 90, nullable = false)
+    @Column(name = "description_branch", length = 90, nullable = false)
     private String descriptionBranch;
 
     @ManyToOne
-    @JoinColumn(name = "idCompany")
-    private Company company;
+    @JoinColumn(name = "idCompany", nullable = false)
+    private Company company; //FK
 
     public Branch() {
     }
